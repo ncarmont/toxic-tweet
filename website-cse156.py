@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
-from logistic_reg_tf_idf import run_model
+from test_model import test_model
 import os
 
 # DEFAULT
@@ -41,11 +41,6 @@ def index():
         init_file_choice = False
 
 
-    if form.validate_on_submit() and form.input_str.data:
-        input_text = form.input_str.data
-        (l,c) = run_model(input_text,file_choice)
-
-        message = "Label: "+ str(l) +"-------- Confidence: "+ str(c)
 
     if form.sent_analysis.data:
         file_choice ="sentiment"
@@ -53,6 +48,12 @@ def index():
     elif form.toxic_analysis.data:
         file_choice ="toxic"
         message = "toxic"
+
+    elif form.validate_on_submit() and form.input_str.data:
+        input_text = form.input_str.data
+        (l,c) = test_model(input_text,file_choice)
+
+        message = "Label: "+ str(l) +"-------- Confidence: "+ str(c)
 
 
 

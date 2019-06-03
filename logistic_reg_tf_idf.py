@@ -2,6 +2,7 @@
 import sys
 import json
 import csv
+import pickle
 
 def train_classifier(X, y, regType='lbfgs'): #regType='lbfgs'):
     """Train a classifier using the given training data.
@@ -161,6 +162,8 @@ def pred_text_input(unlabeled, cls, outfname, sentiment):
     """
     yp = cls.predict(unlabeled.X)
     labels = sentiment.le.inverse_transform(yp)
+    print("THIS IS SENTIMENT")
+    print(type(sentiment))
     conf = cls.predict_proba(unlabeled.X)
     print(unlabeled.X)
     label = labels[0]
@@ -231,28 +234,29 @@ def write_basic_kaggle_file(tsvfile, outfname):
             f.write("\n")
     f.close()
 
-def run_model(input_str, file_choice):
 
-    if (file_choice == "toxic"):
-        tarfname = "data/toxicData.tar.gz"
-    elif(file_choice == "sentiment"):
-        tarfname = "data/sentiment.tar.gz"
-    else:
-        sys.exit()
+# TRAINING
+if __name__ == "__main__":
+    tarfnameSent = "data/sentiment.tar.gz"
+    tarfnameToxic = "data/toxicData.tar.gz"
 
-    # tf-idf
-    sentiment = read_files(tarfname,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
-    print("\nTraining classifier")
-    cls = train_classifier(sentiment.trainX, sentiment.trainy)
-    print("\nEvaluating")
-    evaluate(sentiment.trainX, sentiment.trainy, cls, 'train')
-    evaluate(sentiment.devX, sentiment.devy, cls, 'dev')
+    print("\nTraining classifiers")
+    sentiment = read_files(tarfnameSent,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
+    toxicity = read_files(tarfnameToxic,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
 
-    if(input_str):
-        print("\nReading input data")
-        unlabeled = read_unlabeled_input(input_str, sentiment)     # "you are very good nice"
-        # unlabeled = read_unlabeled(tarfname, sentiment)
-        print("Making prediction: \n")
-        print("input string: "+ input_str + "\n")
-        (label, confidence) = pred_text_input(unlabeled, cls, "data/sentiment-pred.csv", sentiment)
-    return (label, confidence)
+    clsSent = train_classifier(sentiment.trainX, sentiment.trainy)
+    clsToxic = train_classifier(toxicity.trainX, toxicity.trainy)
+
+    file_sent_model = 'sentiment_model.sav'
+    file_toxic_model = 'toxicity_model.sav'
+
+    pickle.dump(clsSent, open(file_sent_model, 'wb'))
+    pickle.dump(clsToxic, open(file_toxic_model, 'wb'))
+
+    print("\nEvaluating Sent")
+    evaluate(sentiment.trainX, sentiment.trainy, clsSent, 'train')
+    evaluate(sentiment.devX, sentiment.devy, clsSent, 'dev')
+
+    print("\nEvaluating Toxic")
+    evaluate(toxicity.trainX, toxicity.trainy, clsToxic, 'train')
+    evaluate(toxicity.devX, toxicity.devy, clsToxic, 'dev')
