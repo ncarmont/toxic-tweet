@@ -10,10 +10,12 @@ def test_model(input_str, file_choice):
     tarfnameToxic = "data/toxicData.tar.gz"
 
     if (file_choice == "toxic"):
+        k = 100
         loaded_model = pickle.load(open(file_toxic_model, 'rb'))
         count_data = read_files(tarfnameToxic,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
 
     elif(file_choice == "sentiment"):
+        k = 300
         loaded_model = pickle.load(open(file_sent_model, 'rb'))
         count_data = read_files(tarfnameSent,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
     else:
@@ -29,13 +31,11 @@ def test_model(input_str, file_choice):
 
     ## TOP K WORDS
     coefficients=loaded_model.coef_[0]
-    k = 100
     # get top_k toxic coefficients -> positive coefficients tends to make prediction toxic
     top_k = np.argsort(coefficients)[-k:]
     top_k_words = []
 
     for i in top_k:
-        # print(count_data.count_vect.get_feature_names()[i])
         top_k_words.append(count_data.count_vect.get_feature_names()[i])
 
     # print("\n\n\n\n\n")

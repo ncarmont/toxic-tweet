@@ -7,6 +7,30 @@ body{
   padding-top: 20px;
 }
 
+.results{
+  font-family: "Helvetica Neue";
+  font-size: 40px;
+  background-color:rgba(29,161,242,1);
+  color: white;
+  text-align: center;
+  padding: 10px 10%;
+}
+
+.prediction-text{
+  float: left;
+  width:45%;
+  /* padding-left: 60px;
+  padding-right: 60px; */
+}
+
+
+
+.prediction-text,.confidence-text{
+  display: inline-block;
+  width: 45%;
+  /* padding: 20px; */
+}
+
 .header-bar {
   margin: 0;
   width: 100%;
@@ -20,7 +44,7 @@ body{
   background-color: white;
   margin: 0;
   padding: 0px 10px 10px 10px;
-  height: 85px;
+  height: 95px;
   display: inline-block;
   float:left;
 }
@@ -28,10 +52,10 @@ body{
 .title {
   color:  white;
   margin: 0;
-  font-size: 40px;
+  font-size: 50px;
   font-family: "Helvetica Neue";
   display: inline-block;
-  padding: 20px 20px 20px 20px;
+  padding: 20px 20px 20px 40px;
   letter-spacing: 0px;
 }
 
@@ -137,4 +161,30 @@ strong{
 progress {
   width: 100%;
   /* margin: 0px 20px; */
+}
+.clouds-container{
+  width: 100%;
+  align-items: center;
+}
+.toxic-img{
+  float: left;
+  /* padding-left: 20px; */
+}
+.non-toxic-img, .toxic-img{
+  padding: 20px 8%;
+  /* height: 400px; */
+  width: 50%;
+  display: inline-block;
+}
+
+.non-toxic-img:hover, .toxic-img:hover{
+  transform: scale(1.01);
+}
+.cloud-title1, .cloud-title2{
+  width: 40%;
+  font-family: "Helvetica Neue";
+  color:rgba(101,119,135,1);
+  font-size: 40px;
+  display: inline-block;
+  text-align: center;
 }
