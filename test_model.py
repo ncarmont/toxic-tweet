@@ -1,4 +1,5 @@
 import pickle
+import numpy as np
 from logistic_reg_tf_idf import read_files, read_unlabeled_input,pred_text_input
 
 def test_model(input_str, file_choice):
@@ -25,7 +26,26 @@ def test_model(input_str, file_choice):
     print("input string: "+ input_str + "\n")
     (label, confidence) = pred_text_input(unlabeled, loaded_model, "data/sentiment-pred.csv", count_data)
 
-    return (label, confidence)
+
+    ## TOP K WORDS
+    coefficients=loaded_model.coef_[0]
+    k = 100
+    # get top_k toxic coefficients -> positive coefficients tends to make prediction toxic
+    top_k = np.argsort(coefficients)[-k:]
+    top_k_words = []
+
+    for i in top_k:
+        # print(count_data.count_vect.get_feature_names()[i])
+        top_k_words.append(count_data.count_vect.get_feature_names()[i])
+
+    # print("\n\n\n\n\n")
+    bottom_k =np.argsort(coefficients)[:k]
+    bottom_k_words = []
+    for i in bottom_k:
+        # print(count_data.count_vect.get_feature_names()[i])
+        bottom_k_words.append(count_data.count_vect.get_feature_names()[i])
+
+    return (label, confidence,top_k_words,bottom_k_words)
 
 
 if __name__ == "__main__":

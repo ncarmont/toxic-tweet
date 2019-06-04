@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"/Users/computerscience/Desktop/flask-forms/venv"
+$VIRTUAL_ENV = r"/Users/computerscience/Desktop/explanatory-NLP-156-master/venv"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]

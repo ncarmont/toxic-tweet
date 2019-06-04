@@ -1,10 +1,140 @@
 /* to override Bootstrap styles for some things */
-
+body{
+  background-color: rgba(230,236,239);
+}
 .space-above {
   margin-top: 20px;
   padding-top: 20px;
 }
 
+.header-bar {
+  margin: 0;
+  width: 100%;
+  background-color:rgba(29,161,242,1);
+}
 .blocker {
   display: block;
+}
+
+.icon-header {
+  background-color: white;
+  margin: 0;
+  padding: 0px 10px 10px 10px;
+  height: 85px;
+  display: inline-block;
+  float:left;
+}
+
+.title {
+  color:  white;
+  margin: 0;
+  font-size: 40px;
+  font-family: "Helvetica Neue";
+  display: inline-block;
+  padding: 20px 20px 20px 20px;
+  letter-spacing: 0px;
+}
+
+
+/* TWITTER BOX */
+
+.tweet-post-profile-pic{
+  display: inline-block;
+  float: left;
+  height: 40px;
+  width: 40px;
+  margin-left: 20px;
+  margin-top: 15px;
+  border-radius: 100%;
+}
+.tweet-post-header{
+  height:40px;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 10px;
+  top:0;
+  margin: 0;
+  width:100%;
+  background-color: rgba(255,255,255,1);
+}
+
+.container{
+  max-width: 650px;
+  padding: 0;
+  margin-top: 40px;
+  border-radius: 10px;
+  background-color: rgba(235,245,254,1);
+}
+
+.container:hover {
+transform: scale(1.01);
+}
+
+.form-control{
+  font-family: "Helvetica Neue";
+  margin-left: 80px !important;
+  width: 80%;
+  height: 120px;
+  border-radius: 10px;
+  border: solid 2px rgba(198,231,251,1);
+}
+
+.form-control:active {
+  border: solid 2px rgba(163,217,249,1);
+}
+
+#sent_analysis {
+  margin-left: 80px;
+}
+
+#sent_analysis, #toxic_analysis {
+  border-radius: 10px;
+  color: rgba(81,178,245,1);
+  border:none;
+  background-color: transparent;
+}
+
+#sent_analysis:hover, #toxic_analysis:hover {
+  border: solid 2px rgba(166,212,251,1);
+}
+
+#submit {
+  border: none;
+  font-family: "Helvetica Neue";
+  font-size: 14px;
+  margin-left: 15%;
+  height: 40px;
+  border-radius: 20px;
+  color: white;
+  background-color:rgba(29,161,242,1);
+
+}
+
+.sub-title{
+  max-width: 80%;
+  margin: 0 10%;
+  padding: 40px 0 30px 0;
+  font-family: "Helvetica Neue";
+  color:rgba(101,119,135,1);
+  font-size: 60px;
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+strong{
+  color: white;
+  height: 20px;
+  padding: 0 20px;
+  font-family: "Helvetica Neue";
+  display: block;
+  width: 100%;
+  text-align: center;
+  /* border-radius: 10px; */
+  background-color:rgba(29,161,242,1);
+}
+
+progress {
+  width: 100%;
+  /* margin: 0px 20px; */
 }

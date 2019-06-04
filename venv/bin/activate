@@ -40,7 +40,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/computerscience/Desktop/flask-forms/venv"
+VIRTUAL_ENV="/Users/computerscience/Desktop/explanatory-NLP-156-master/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
