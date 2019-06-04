@@ -98,7 +98,7 @@ transform: scale(1.01);
 .form-control{
   font-family: "Helvetica Neue";
   margin-left: 80px !important;
-  width: 80%;
+  width: 500px;
   height: 120px;
   border-radius: 10px;
   border: solid 2px rgba(198,231,251,1);
@@ -138,7 +138,7 @@ transform: scale(1.01);
 .sub-title{
   max-width: 80%;
   margin: 0 10%;
-  padding: 40px 0 30px 0;
+  padding: 50px 0 40px 0;
   font-family: "Helvetica Neue";
   color:rgba(101,119,135,1);
   font-size: 60px;
@@ -180,8 +180,12 @@ progress {
 .non-toxic-img:hover, .toxic-img:hover{
   transform: scale(1.01);
 }
-.cloud-title1, .cloud-title2{
-  width: 40%;
+.cloud-title1{
+  float: left;
+}
+.cloud-title1, .cloud-title2 {
+  height: 80px;
+  width: 50%;
   font-family: "Helvetica Neue";
   color:rgba(101,119,135,1);
   font-size: 40px;

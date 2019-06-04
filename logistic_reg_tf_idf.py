@@ -88,6 +88,78 @@ def read_files(tarfname,tfidf= False, incl_stop_words=False, lowercase=True, max
     return sentiment
 
 
+def tsv_new_read_files(tfidf=True,min_df=1,max_df=1.0,ngram_range=(1,1)):
+
+    trainname = "train.csv"
+    devname = "dev.csv"
+
+
+    class Data: pass
+    sentiment = Data()
+    print("-- train data")
+    #read train_data and train_labels and print out the length
+    sentiment.train_data, sentiment.train_labels = read_csv(trainname)
+    len_trainset = len(sentiment.train_data)
+    print("training dataset amount: {}".format(len_trainset))
+    n_train = sentiment.train_labels.count("TOXIC")
+    print("toxic in train set: {}  ({:.2f}%)".format(n_train,(n_train/len_trainset)*100))
+    print("non-toxic in train set : {}".format(len_trainset-n_train))
+    print("-- dev data")
+    #read dev_data and dev_labels and print out the length
+    sentiment.dev_data, sentiment.dev_labels = read_csv(devname)
+    len_devset= len(sentiment.dev_data)
+    print("dev dataset amount: {} ".format(len_devset))
+    n_dev = sentiment.dev_labels.count("TOXIC")
+    print("toxic in dev set : {}  ({:.2f}%)".format(n_dev, (n_dev / len_devset)*100))
+    print("non-toxic in dev set : {}  ".format(len_devset-n_dev))
+    #print("-- transforming data and labels")
+
+
+    # Convert a collection of text documents to a matrix of token counts
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    # stop_words=badwords,min_df=1,max_df=0.4
+
+    if tfidf == False:
+        sentiment.count_vect = CountVectorizer(min_df=min_df,max_df=max_df,ngram_range=ngram_range)
+        sentiment.trainX = sentiment.count_vect.fit_transform(sentiment.train_data)
+        sentiment.devX = sentiment.count_vect.transform(sentiment.dev_data)
+    else:
+        sentiment.count_vect = TfidfVectorizer(min_df=min_df,max_df=max_df,ngram_range=ngram_range)
+        sentiment.trainX = sentiment.count_vect.fit_transform(sentiment.train_data)
+        sentiment.devX = sentiment.count_vect.transform(sentiment.dev_data)
+
+    from sklearn import preprocessing
+    # Encode labels with value between 0 and n_classes-1.
+    sentiment.le = preprocessing.LabelEncoder()
+    sentiment.le.fit(sentiment.train_labels)
+    sentiment.target_labels = sentiment.le.classes_
+    sentiment.trainy = sentiment.le.transform(sentiment.train_labels)
+    sentiment.devy = sentiment.le.transform(sentiment.dev_labels)
+    return sentiment
+
+def read_csv(fname):
+    import csv
+    data = []
+    labels = []
+    if fname == "train.csv":
+        count = 50000
+    else:
+        count = 10000
+    with open(fname,encoding='UTF-8') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0]=="toxic":
+                labels.append("TOXIC")
+            else:
+                labels.append("NOT_TOXIC")
+            data.append(row[1])
+            count -=1
+            if count == 0:
+                break
+    return data, labels
+
+
 def read_unlabeled_input(input_str, sentiment):
     class Data: pass
     unlabeled = Data()
@@ -234,15 +306,34 @@ def write_basic_kaggle_file(tsvfile, outfname):
             f.write("\n")
     f.close()
 
+def load_pickle_sentiment(pickle_file):
+    sentiment_list = []
+    with open(pickle_file,'rb') as f:
+        while True:
+            try:
+                sentiment_list.append(pickle.load(f))
+            except EOFError:
+                break
+    sentiment = sentiment_list[0]
+    top_k_words = sentiment_list[1]
+    bottom_k_words = sentiment_list[2]
+    return sentiment, top_k_words, bottom_k_words
+
 
 # TRAINING
+class Data: pass
+
 if __name__ == "__main__":
     tarfnameSent = "data/sentiment.tar.gz"
     tarfnameToxic = "data/toxicData.tar.gz"
 
     print("\nTraining classifiers")
-    sentiment = read_files(tarfnameSent,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
-    toxicity = read_files(tarfnameToxic,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
+    # sentiment = read_files(tarfnameSent,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
+    # sentiment = load_pickle_sentiment('original_train')
+    sentiment, _, _ = load_pickle_sentiment('original_train')
+    # toxicity = tsv_new_read_files(tfidf=True,max_df=0.5)
+    toxicity, _, _ = load_pickle_sentiment('sentiment_train')
+    # toxicity = load_pickle_sentiment('sentiment_train')
 
     clsSent = train_classifier(sentiment.trainX, sentiment.trainy)
     clsToxic = train_classifier(toxicity.trainX, toxicity.trainy)

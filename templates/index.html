@@ -20,7 +20,7 @@ Pre-Tweet
 		<img class="icon-header" src="{{ url_for('static', filename='images/favicon.ico') }}" alt="icon">
 		<h1 class="title">toxic tweet</h1>
 	</div>
-	<h1 class='sub-title'>Get a second-chance before posting a Toxic Tweet</h1>
+	<h1 class='sub-title'>Get a second-chance before posting a regrettable Tweet</h1>
 
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -83,7 +83,27 @@ Pre-Tweet
 		<img class="non-toxic-img" src="{{ url_for('static', filename= ''+ word_cloud_good  ) }}" alt={{word_cloud_good}}/>
 	</div>
 
-	<h1 class='sub-title'>Weight Comparison</h1>
+	<h1 class='sub-title'>Global {{ detect }} Statistics</h1>
+	<h1 class='cloud-title1'>{{cloud_1}}</h1>
+	<h1 class='cloud-title2'>{{cloud_2}}</h1>
+	<div class="clouds-container">
+		<img class="toxic-img" src="{{ url_for('static', filename= 'images/global-graph-1-'+detect+'.png') }}"/>
+		<img class="non-toxic-img" src="{{ url_for('static', filename= 'images/global-graph-2-'+ detect+'.png'  ) }}"/>
+	</div>
+	<div class="clouds-container">
+		<img class="toxic-img" src="{{ url_for('static', filename= 'images/global-wordcloud-1-'+ detect+'.png'  ) }}"/>
+		<img class="non-toxic-img" src="{{ url_for('static', filename= 'images/global-wordcloud-2-'+ detect+'.png'  ) }}"/>
+	</div>
+
+
+	<h1 class='sub-title'>Classification Performance </h1>
+	<div class="clouds-container">
+		<img class="toxic-img" src="{{ url_for('static', filename= 'images/global-peformance-1-'+ detect+'.png'  ) }}"/>
+		<img class="non-toxic-img" src="{{ url_for('static', filename= 'images/global-performance-2-'+ detect+'.png' ) }}"/>
+	</div>
+
+
+
 </body>
 	<script>
 

@@ -17,9 +17,9 @@ import requests
 # DEFAULT
 file_choice = "sentiment"
 init_file_choice = True
-cloud_1= "Strong Negative Words"
-cloud_2 = "Strong Positive Words"
-
+cloud_1= "Top Negative Words"
+cloud_2 = "Top Positive Words"
+class Data:pass
 
 # BOOSTRAP
 app = Flask(__name__)
@@ -32,6 +32,7 @@ app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 class userInputForm(FlaskForm):
 
     input_str = StringField('', validators=[])
+    # new = SubmitField('😊 new')  # ☻
     sent_analysis = SubmitField('😊 Sentiment Analysis')  # ☻
     toxic_analysis = SubmitField('⚠️ Toxic Comment Analysis')
     submit = SubmitField('Tweet')
@@ -60,14 +61,14 @@ def index():
     if form.sent_analysis.data:
         file_choice ="sentiment"
         message = "Detect: Sentiment"
-        cloud_1= "Strong Negative Words"
-        cloud_2 = "Strong Positive Words"
+        cloud_1= "Top Negative Words"
+        cloud_2 = "Top Positive Words"
 
     elif form.toxic_analysis.data:
         file_choice ="toxic"
         message = "Detect: Toxicity"
-        cloud_1 = "Strong Toxic Words"
-        cloud_2 = "Strong Non-Toxic Words"
+        cloud_1 = "Top Non-Toxic Words"
+        cloud_2 = "Top Toxic Words"
 
     elif form.validate_on_submit() and form.input_str.data:
         input_text = form.input_str.data
@@ -142,7 +143,7 @@ def index():
         # message = "Label: "+ str(l) +"-------- Confidence: "+ str(c)
 
 
-    return render_template('index.html', cloud_1 = cloud_1, cloud_2 =cloud_2, word_cloud_good=wordCloud_good_file, wordCloud_bad=wordCloud_bad_file, message=message, form=form, label= str(l), confidence = int(c*100), str_conf = str(c))
+    return render_template('index.html', detect = file_choice, cloud_1 = cloud_1, cloud_2 =cloud_2, word_cloud_good=wordCloud_good_file, wordCloud_bad=wordCloud_bad_file, message=message, form=form, label= str(l), confidence = int(c*100), str_conf = str(c))
 
 @app.after_request
 def add_header(r):
