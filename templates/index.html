@@ -86,9 +86,12 @@ Pre-Tweet
 	<h1 class='sub-title'>Global {{ detect }} Statistics</h1>
 	<h1 class='cloud-title1'>{{cloud_1}}</h1>
 	<h1 class='cloud-title2'>{{cloud_2}}</h1>
+
+
+
 	<div class="clouds-container">
 		<img class="toxic-img" src="{{ url_for('static', filename= 'images/global-graph-1-'+detect+'.png') }}"/>
-		<img class="non-toxic-img" src="{{ url_for('static', filename= 'images/global-graph-2-'+ detect+'.png'  ) }}"/>
+	  <img class="non-toxic-img" src="{{ url_for('static', filename= 'images/global-graph-2-'+ detect+'.png'  ) }}"/>
 	</div>
 	<div class="clouds-container">
 		<img class="toxic-img" src="{{ url_for('static', filename= 'images/global-wordcloud-1-'+ detect+'.png'  ) }}"/>
@@ -102,7 +105,18 @@ Pre-Tweet
 		<img class="non-toxic-img" src="{{ url_for('static', filename= 'images/global-performance-2-'+ detect+'.png' ) }}"/>
 	</div>
 
+<h1 class='sub-title'>Dev Examples </h1>
+<h1 class='cloud-title1'>Correct</h1>
+<h1 class='cloud-title2'>Overconfident</h1>
+<div class="clouds-container">
+	<img class="non-toxic-img" src="{{ url_for('static', filename= 'images/tweet-mistake-'+detect+'.png') }}"/>
+	<img class="toxic-img" src="{{ url_for('static', filename= 'images/tweet-correct-'+ detect+'.png'  ) }}"/>
+</div>
 
+<h1 class='sub-title'>Datasets Used </h1>
+
+<h1 style="padding: 20px 40px"> For Sentiment Analysis we used a dataset containing review data with a vocabulary of 9880 words with sentiment labeled as POSITIVE or NEGATIVE</h1>
+<h1 style="padding: 20px 40px"> For Toxic Comment Analysis we used a dataset of 160k Wikipedia comments marked as either TOXIC or NON-TOXIC. Where Toxic is defined as containing hate-speech, profanity, insult, adultery or discrimination</h1>
 
 </body>
 	<script>

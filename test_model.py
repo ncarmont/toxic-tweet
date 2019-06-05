@@ -27,6 +27,16 @@ def test_model(input_str, file_choice):
     if (file_choice == "toxic"):
         loaded_model = pickle.load(open(file_toxic_model, 'rb'))
         count_data, top_k_words, bottom_k_words = load_pickle_sentiment('sentiment_train')
+        print("TOP WORDS \n\n\n\n")
+        print(top_k_words)
+        print("BOTTOM WORDS \n\n\n\n")
+        print(bottom_k_words)
+        k = 500
+        top_k_words  = top_k_words[:k]
+        print(top_k_words)
+        bottom_k_words = bottom_k_words[:k]
+        print(bottom_k_words)
+
         # count_data = tsv_new_read_files(tfidf=True,max_df=0.5)
         # count_data = load_pickle_sentiment('sentiment_train')
 
@@ -35,6 +45,21 @@ def test_model(input_str, file_choice):
         count_data, top_k_words, bottom_k_words = load_pickle_sentiment('original_train')
         # count_data = read_files(tarfnameSent,tfidf= True, incl_stop_words=False, lowercase=True, max_df=1.0, min_df=1,max_features=None,ngram_range=(1,1))
         # count_data = load_pickle_sentiment('original_train')
+        k = 300
+        coefficients=loaded_model.coef_[0]
+        # get top_k toxic coefficients -> positive coefficients tends to make prediction toxic
+        top_k = np.argsort(coefficients)[-k:]
+        top_k_words = []
+        print("START")
+        for i in top_k:
+            top_k_words.append(count_data.count_vect.get_feature_names()[i])
+
+        bottom_k =np.argsort(coefficients)[:k]
+        bottom_k_words = []
+        for i in bottom_k:
+            # print(count_data.count_vect.get_feature_names()[i])
+            bottom_k_words.append(count_data.count_vect.get_feature_names()[i])
+        print("END")
     else:
         sys.exit()
 
@@ -45,10 +70,11 @@ def test_model(input_str, file_choice):
     print("input string: "+ input_str + "\n")
     (label, confidence) = pred_text_input(unlabeled, loaded_model, "data/sentiment-pred.csv", count_data)
 
-    k = 300
-    top_k_words  = top_k_words[:k]
-    bottom_k_words = bottom_k_words[:k]
-    ## TOP K WORDS
+
+
+
+
+    # TOP K WORDS
     # k = 300
     # coefficients=loaded_model.coef_[0]
     # # get top_k toxic coefficients -> positive coefficients tends to make prediction toxic
@@ -64,6 +90,7 @@ def test_model(input_str, file_choice):
     #     # print(count_data.count_vect.get_feature_names()[i])
     #     bottom_k_words.append(count_data.count_vect.get_feature_names()[i])
     # print("END")
+
     return (label, confidence,top_k_words,bottom_k_words)
 
 

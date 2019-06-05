@@ -17,8 +17,8 @@ import requests
 # DEFAULT
 file_choice = "sentiment"
 init_file_choice = True
-cloud_1= "Top Negative Words"
-cloud_2 = "Top Positive Words"
+cloud_2= "Top Negative Words"
+cloud_1 = "Top Positive Words"
 class Data:pass
 
 # BOOSTRAP
@@ -61,54 +61,79 @@ def index():
     if form.sent_analysis.data:
         file_choice ="sentiment"
         message = "Detect: Sentiment"
-        cloud_1= "Top Negative Words"
-        cloud_2 = "Top Positive Words"
+        cloud_2= "Top Negative Words"
+        cloud_1 = "Top Positive Words"
 
     elif form.toxic_analysis.data:
         file_choice ="toxic"
         message = "Detect: Toxicity"
-        cloud_1 = "Top Non-Toxic Words"
-        cloud_2 = "Top Toxic Words"
+        cloud_1 = "Top Toxic Words"
+        cloud_2 = "Top Non-Toxic Words"
+
 
     elif form.validate_on_submit() and form.input_str.data:
-        input_text = form.input_str.data
-        (l,c,bottom_k_words,top_k_words) = test_model(input_text.lower(),file_choice)
+        input_text = str(form.input_str.data)
+        # print("BABYCAKES ROUND 2 \n\n\n")
+        # print(input_text)
+        input_text=input_text.lower().replace('out',' ')
+        # print("BABYCAKES WAS HERE \n\n\n\n")
+        # print(input_text)
+        (l,c,top_k_words, bottom_k_words) = test_model(input_text,file_choice)
+
+        # print("TOP K WORDS\n\n\n")
+        # print(top_k_words)
+        #
+        # print("BOTTOM K WORDS\n\n\n")
+        # print(bottom_k_words)
+
+
 
         # TOP K top_k_words
 
         toxic_words = ''
-        for tw in top_k_words:
+        for tw in bottom_k_words:
             # print(tw)
             toxic_words = toxic_words + tw + ' '
 
-        print("\n\n\n\n")
         non_toxic_words = ''
-        for tw in bottom_k_words:
+        for tw in top_k_words :
             # print(tw)
             non_toxic_words = non_toxic_words + tw + ' '
+
+
+        stopwords = set(STOPWORDS)
 
         non_toxic_cloud_words = ''
         words_in_good_cloud = False
         for w in input_text.split(' '):
-            if w in non_toxic_words and len(w) > 2:
-                non_toxic_cloud_words = non_toxic_cloud_words + w + ' '
-                words_in_good_cloud = True
+            if (w in non_toxic_words) and (w not in stopwords):
+                if w.strip() :
+                    non_toxic_cloud_words = non_toxic_cloud_words + w + ' '
+                    words_in_good_cloud = True
 
 
         toxic_cloud_words = ''
         words_in_bad_cloud = False
         for w in input_text.split(' '):
-            if w in toxic_words and len(w) > 2:
-                toxic_cloud_words = toxic_cloud_words + w + ' '
-                words_in_bad_cloud = True
+            print("this is w: "+w)
+            if (w in toxic_words) and (w not in stopwords) and (w not in non_toxic_words):
+                if w.strip():
+                    # print("BABYCAKES HIDIN HERE\n\n")
+                    # print(w)
+                    # print(len(w))
+                    toxic_cloud_words = toxic_cloud_words + w + ' '
+                    words_in_bad_cloud = True
 
-        stopwords = set(STOPWORDS)
 
-        if words_in_bad_cloud:
+
+
+        if words_in_good_cloud :
+            # print("LETS SEE WHATS IN TOXI WORDS\n\n\n\n")
+            # print(toxic_cloud_words)
             wordcloud = WordCloud(width = 512, height = 512,
                             background_color ='black',
                             stopwords = stopwords,
-                            min_font_size = 10).generate(toxic_cloud_words)
+                            min_font_size = 10).generate(non_toxic_cloud_words)
             wordCloud_good = 'static/images/wordCloud_toxic.png'
             wordcloud.to_file(wordCloud_good)
         else:
@@ -120,11 +145,13 @@ def index():
             wordcloud.to_file(wordCloud_good)
 
 
-        if words_in_good_cloud:
+        if words_in_bad_cloud:
+            # print("LETS SEE WHATS IN NON-TOXI WORDS\n\n\n\n")
+            # print(non_toxic_cloud_words)
             wordcloud = WordCloud(width = 512, height = 512,
                             background_color ='black',
                             stopwords = stopwords,
-                            min_font_size = 10).generate(non_toxic_cloud_words)
+                            min_font_size = 10).generate(str(toxic_cloud_words))
             wordCloud_bad = 'static/images/wordCloud_non_toxic.png'
             wordcloud.to_file(wordCloud_bad)
         else:
@@ -139,6 +166,10 @@ def index():
     wordCloud_bad_file = "images/wordCloud_toxic.png"
     wordCloud_good_file = "images/wordCloud_non_toxic.png"
 
+    # if(file_choice == 'toxic'):
+    #     temp = wordCloud_bad_file
+    #     wordCloud_bad_file = wordCloud_good_file
+    #     wordCloud_good_file = temp
 
         # message = "Label: "+ str(l) +"-------- Confidence: "+ str(c)
 
