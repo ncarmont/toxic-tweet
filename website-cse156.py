@@ -52,6 +52,8 @@ def index():
     form = userInputForm()
 
     l = ""
+    top_k_sent_words = []
+    bottom_k_sent_words = []
     c = 0
 
     if init_file_choice:
@@ -108,6 +110,16 @@ def index():
         for w in input_text.split(' '):
             if (w in non_toxic_words) and (w not in stopwords):
                 if w.strip() :
+
+                    desired_word = [d for d in top_k_words if w in d]
+                    same_word = [w1 for w1 in desired_word if w1==w]
+                    if(len(same_word) > 0):
+                        if(file_choice=="sentiment"):
+                            top_k_words.reverse()
+                        top_k_sent_words.append((w,str(top_k_words.index(same_word[0]))+"th word"))
+                    else:
+                        top_k_sent_words.append((w,str(top_k_words.index(desired_word[0]))+"th word"))
+
                     non_toxic_cloud_words = non_toxic_cloud_words + w + ' '
                     words_in_good_cloud = True
 
@@ -118,11 +130,30 @@ def index():
             print("this is w: "+w)
             if (w in toxic_words) and (w not in stopwords) and (w not in non_toxic_words):
                 if w.strip():
+
+                    desired_word = [d for d in bottom_k_words if w in d]
+                    same_word = [w1 for w1 in desired_word if w1==w]
+                    if(len(same_word) > 0):
+                        if(file_choice=="toxic"):
+                            bottom_k_words.reverse()
+                        bottom_k_sent_words.append((w,str(bottom_k_words.index(same_word[0]))+"th word"))
+                    else:
+                        bottom_k_sent_words.append((w,str(bottom_k_words.index(desired_word[0]))+"th word"))
                     # print("BABYCAKES HIDIN HERE\n\n")
                     # print(w)
                     # print(len(w))
                     toxic_cloud_words = toxic_cloud_words + w + ' '
                     words_in_bad_cloud = True
+
+        # list index of sentence words in top list
+        #
+        # for w in input_text.strip().split(' '):
+        #     desired_word = [d for d in top_k_words if w in d]
+        #     if desired_word:
+        #         top_k_sent_words.append((desired_word[0],top_k_words.index(desired_word[0])))
+        #     else:
+        #         bottom_k_sent_words.append((w,'Not in Top K words'))
+
 
 
 
@@ -163,8 +194,12 @@ def index():
             wordcloud.to_file(wordCloud_bad)
 
 
+
+
     wordCloud_bad_file = "images/wordCloud_toxic.png"
     wordCloud_good_file = "images/wordCloud_non_toxic.png"
+
+
 
     # if(file_choice == 'toxic'):
     #     temp = wordCloud_bad_file
@@ -174,7 +209,7 @@ def index():
         # message = "Label: "+ str(l) +"-------- Confidence: "+ str(c)
 
 
-    return render_template('index.html', detect = file_choice, cloud_1 = cloud_1, cloud_2 =cloud_2, word_cloud_good=wordCloud_good_file, wordCloud_bad=wordCloud_bad_file, message=message, form=form, label= str(l), confidence = int(c*100), str_conf = str(c))
+    return render_template('index.html',topSentWords = top_k_sent_words, botSentWords = bottom_k_sent_words, detect = file_choice, cloud_1 = cloud_1, cloud_2 =cloud_2, word_cloud_good=wordCloud_good_file, wordCloud_bad=wordCloud_bad_file, message=message, form=form, label= str(l), confidence = int(c*100), str_conf = str(c))
 
 @app.after_request
 def add_header(r):

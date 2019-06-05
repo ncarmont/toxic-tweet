@@ -31,8 +31,8 @@ def test_model(input_str, file_choice):
         print(top_k_words)
         print("BOTTOM WORDS \n\n\n\n")
         print(bottom_k_words)
-        k = 500
-        top_k_words  = top_k_words[:k]
+        k = 300
+        top_k_words  = top_k_words[:-k]
         print(top_k_words)
         bottom_k_words = bottom_k_words[:k]
         print(bottom_k_words)

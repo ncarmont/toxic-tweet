@@ -175,7 +175,7 @@ transform: scale(1.01);
 .sub-title{
   max-width: 80%;
   margin: 0 10%;
-  padding: 50px 0 40px 0;
+  padding: 80px 0 40px 0;
   font-family: "Helvetica Neue";
   color:rgba(101,119,135,1);
   font-size: 60px;
@@ -215,7 +215,7 @@ progress {
 }
 
 .non-toxic-img:hover, .toxic-img:hover{
-  transform: scale(1.01);
+  transform: scale(1.02);
 }
 .cloud-title1{
   float: left;
