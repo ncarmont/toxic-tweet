@@ -8,7 +8,7 @@ from wtforms.validators import Required
 from test_model import test_model
 import os
 from wordcloud import WordCloud, STOPWORDS
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import random as random
 from PIL import Image
 import urllib
